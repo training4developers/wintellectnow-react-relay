@@ -3,7 +3,6 @@ module.exports = function(grunt) {
 	'use strict';
 	
 	const webpack = require('webpack');
-	//const webpackStream = require('webpack-stream');
 
 	grunt.initConfig({
 		webServer: {
