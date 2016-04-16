@@ -1,11 +1,11 @@
 {
-	"name": "wintellectnow-react-relay",
-	"version": "1.0.0",
-	"description": "",
-	"main": "index.js",
-	"scripts": {
-		"update-schema": "babel-node --presets es2015,stage-0 ./scripts/updateSchema.js"
-	},
+  "name": "wintellectnow-react-relay",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "update-schema": "babel-node --presets es2015,stage-0 ./scripts/updateSchema.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
