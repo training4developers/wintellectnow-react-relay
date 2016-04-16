@@ -1,8 +1,6 @@
-'use strict';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
-import WidgetTool from './components/widget-tool';
+import WidgetToolComponent from './components/widget-tool';
 import { getEnumList, getList } from './graphql';
 
 Promise.all([
@@ -14,7 +12,7 @@ Promise.all([
 		results.users.map(user => ({ value: user.id, label: user.name })))
 ]).then(results => {
 	return ReactDOM.render(
-		<WidgetTool widgets={results[2]} colorList={results[0]}
+		<WidgetToolComponent widgets={results[2]} colorList={results[0]}
 			sizeList={results[1]} userList={results[3]} />,
 		document.querySelector('main'));
 });

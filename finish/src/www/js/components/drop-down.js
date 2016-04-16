@@ -1,6 +1,4 @@
-'use strict';
-
-import React from 'react';
+import React from 'react'; // eslint-disable no-unused-vars
 
 export default props =>
 	<select className="form-control form-control-sm" name={props.name} value={props.value} onChange={props.onChange}>
