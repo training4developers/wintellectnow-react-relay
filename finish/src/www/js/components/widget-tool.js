@@ -37,8 +37,6 @@ export default class WidgetTool extends React.Component {
 			id: parseInt(user.value, 10),
 			name: user.label
 		};
-		console.dir(this.props.userList);
-		console.dir(widget);
 		if (widget.id !== -1) {
 			this._updateWidget(widget);
 		} else {

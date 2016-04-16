@@ -1,5 +1,6 @@
 'use strict';
 
+// queries the GraphQL server using fetch
 const executeQuery = (url, resultFn) =>
 	fetch(url).then(response => response.json()).then(resultFn);
 
