@@ -1,6 +1,9 @@
 module.exports = function(grunt) {
 
 	'use strict';
+	
+	const webpack = require('webpack');
+	//const webpackStream = require('webpack-stream');
 
 	grunt.initConfig({
 		webServer: {
@@ -73,7 +76,14 @@ module.exports = function(grunt) {
 								'react', 'es2015', 'stage-0']
 						}
 					}]
-				}
+				},
+				plugins: [
+					new webpack.ProvidePlugin({
+						'Promise': 'exports?global.Promise!es6-promise',
+						'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch',
+						'window.fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'
+					})
+				]
 			}
 		},
 		watch: {
