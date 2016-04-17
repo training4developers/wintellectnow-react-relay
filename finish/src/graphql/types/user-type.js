@@ -1,10 +1,10 @@
 import { GraphQLObjectType, GraphQLString, GraphQLList } from 'graphql';
-import { globalIdField } from 'graphql-relay';
+import { globalIdField, connectionArgs, connectionFromPromisedArray } from 'graphql-relay';
 import { nodeInterface } from '../node-definitions';
-import { widgetType } from './widget-type';
 import { getUserWidgets, getUser } from '../../database';
 import User from '../../models/user';
 import { registerType } from '../type-registry';
+import { widgetConnection } from '../connections/widget-connection';
 
 export const userType = new GraphQLObjectType({
 	name: 'User',
@@ -16,11 +16,10 @@ export const userType = new GraphQLObjectType({
 			description: 'A user name'
 		},
 		widgets: {
-			type: new GraphQLList(widgetType),
+			type: widgetConnection,
 			description: 'A list of widgets',
-			resolve: ({
-				id
-			}) => getUserWidgets(id)
+			args: connectionArgs,
+			resolve: ({id}, args) => connectionFromPromisedArray(getUserWidgets(id), args)
 		}
 	}),
 	interfaces: () => [nodeInterface]

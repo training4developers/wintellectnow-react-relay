@@ -6,10 +6,13 @@ export const registerType = (model, type, lookupFn) => {
 	types[type.name] = { type, model, lookupFn };
 };
 
-export const getNode = (globalId) => {
+export const getNode = globalId => {
 	
-	const { typeName, id} = fromGlobalId(globalId);
+	const { type : typeName, id} = fromGlobalId(globalId);
 	
+	console.log(types);
+	console.log(typeName, id);
+
 	if (types[typeName]) {
 		return types[typeName].lookupFn(id);
 	} else {
@@ -19,6 +22,8 @@ export const getNode = (globalId) => {
 };
 
 export const getNodeType = obj => {
+	
+	console.dir(obj);
 	
 	for (let typeName of Object.keys(types)) {
 		if (obj instanceof types[typeName].model) {

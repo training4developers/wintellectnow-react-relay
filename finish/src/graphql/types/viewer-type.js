@@ -1,11 +1,13 @@
-import { GraphQLObjectType, GraphQLID, GraphQLList, GraphQLInt } from 'graphql';
-import { globalIdField } from 'graphql-relay';
+import { GraphQLObjectType, GraphQLID } from 'graphql';
+import { globalIdField, connectionArgs, connectionFromPromisedArray } from 'graphql-relay';
 import { nodeInterface } from '../node-definitions';
 import { userType } from './user-type';
 import { widgetType } from './widget-type';
 import { getViewer, getUser, getUsers, getWidget, getWidgets } from '../../database';
 import Viewer from '../../models/viewer';
 import { registerType } from '../type-registry';
+import { userConnection } from '../connections/user-connection';
+import { widgetConnection } from '../connections/widget-connection';
 
 export const viewerType = new GraphQLObjectType({
 	name: 'Viewer',
@@ -16,23 +18,15 @@ export const viewerType = new GraphQLObjectType({
 			type: userType,
 			description: 'Find user by id',
 			args: {
-				id: {
-					type: GraphQLID,
-					description: 'A user id'
-				}
+				id: { type: GraphQLID }
 			},
 			resolve: (_, {id}) => getUser(id)
 		},
 		users: {
-			type: new GraphQLList(userType),
+			type: userConnection,
 			description: 'A list of users',
-			args: {
-				count: {
-					type: GraphQLInt,
-					description: 'Number of users to return'
-				}
-			},
-			resolve: (_, {count}) => count ? getUsers().then(users => users.slice(0, count)) : getUsers()
+			args: connectionArgs,
+			resolve: (_, args) => connectionFromPromisedArray(getUsers(), args)
 		},
 		widget: {
 			type: widgetType,
@@ -46,9 +40,10 @@ export const viewerType = new GraphQLObjectType({
 			resolve: (_, {id}) => getWidget(id)
 		},
 		widgets: {
-			type: new GraphQLList(widgetType),
+			type: widgetConnection,
 			description: 'A list of widgets',
-			resolve: () => getWidgets()
+			args: connectionArgs,
+			resolve: (_, args) => connectionFromPromisedArray(getWidgets(), args)
 		}
 	}),
 	interfaces: () => [nodeInterface]
