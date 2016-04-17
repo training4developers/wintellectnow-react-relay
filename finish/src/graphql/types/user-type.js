@@ -1,37 +1,29 @@
-import {
-	GraphQLObjectType, GraphQLString,
-	GraphQLList, GraphQLID, GraphQLInputObjectType
-} from 'graphql';
+import { GraphQLObjectType, GraphQLString, GraphQLList } from 'graphql';
+import { globalIdField } from 'graphql-relay';
+import { nodeInterface } from '../node-definitions';
+import { widgetType } from './widget-type';
+import { getUserWidgets, getUser } from '../../database';
+import User from '../../models/user';
+import { registerType } from '../type-registry';
 
-import { widgetType} from './widget-type';
-import { getUserWidgets } from '../../database';
-
-const userTypeFields = {
-	id: {
-		type: GraphQLID,
-		description: 'A user id'
-	},
-	name: {
-		type: GraphQLString,
-		description: 'A user name'
-	}
-};
-
-const userTypeOptions = {
+export const userType = new GraphQLObjectType({
 	name: 'User',
 	description: 'A user',
-	fields: () => userTypeFields
-};
-
-export const userInputType = new GraphQLInputObjectType(
-	Object.assign({}, userTypeOptions, { name: 'UserInput' }));
-
-export const userType = new GraphQLObjectType(
-
-	Object.assign({}, userTypeOptions, {
-		fields: () => Object.assign({}, userTypeFields, { widgets: {
+	fields: () => ({
+		id: globalIdField('User'),
+		name: {
+			type: GraphQLString,
+			description: 'A user name'
+		},
+		widgets: {
 			type: new GraphQLList(widgetType),
 			description: 'A list of widgets',
-			resolve: ({id}) => getUserWidgets(id)
-		} })
-	}));
+			resolve: ({
+				id
+			}) => getUserWidgets(id)
+		}
+	}),
+	interfaces: () => [nodeInterface]
+});
+
+registerType(User, userType, getUser);
