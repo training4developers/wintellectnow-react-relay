@@ -1,4 +1,4 @@
-import { GraphQLObjectType, GraphQLString, GraphQLList } from 'graphql';
+import { GraphQLObjectType, GraphQLString } from 'graphql';
 import { globalIdField, connectionArgs, connectionFromPromisedArray } from 'graphql-relay';
 import { nodeInterface } from '../node-definitions';
 import { getUserWidgets, getUser } from '../../database';

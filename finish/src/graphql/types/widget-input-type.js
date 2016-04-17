@@ -32,7 +32,7 @@ const fields = {
 };
 
 export const insertWidgetInputType = new GraphQLInputObjectType({
-	name: 'InsertWidgetInput',
+	name: 'InputInsertWidget',
 	description: 'A widget',
 	fields: () => fields
 });
