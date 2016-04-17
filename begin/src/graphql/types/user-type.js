@@ -1,5 +1,4 @@
 import { GraphQLObjectType, GraphQLString, GraphQLID, GraphQLList } from 'graphql';
-import { nodeInterface } from '../node-definitions';
 import { getUserWidgets } from '../../database';
 import { widgetType } from './widget-type';
 
@@ -20,6 +19,5 @@ export const userType = new GraphQLObjectType({
 			description: 'A list of widgets',
 			resolve: ({id}) => getUserWidgets(id)
 		}
-	}),
-	interfaces: () => [nodeInterface]
+	})
 });
