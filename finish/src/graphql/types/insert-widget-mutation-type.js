@@ -1,4 +1,4 @@
-import { mutationWithClientMutationId, cursorForObjectInConnection } from 'graphql-relay';
+import { mutationWithClientMutationId, fromGlobalId, offsetToCursor } from 'graphql-relay';
 import { insertWidgetInputType } from './widget-input-type';
 import { viewerType } from './viewer-type';
 import { WidgetEdge } from '../connections/widget-connection';
@@ -20,11 +20,19 @@ export const insertWidgetMutationType = mutationWithClientMutationId({
 		},
 		widgetEdge: {
 			type: WidgetEdge,
-			resolve: widget => ({
-				cursor: cursorForObjectInConnection(getWidgets(), widget),
-				node: widget
-			})
+			resolve: widget => { 
+				return getWidgets().then(widgets => {
+					const offset = widgets.indexOf(widgets.find(w => w.id === widget.id));
+					return {
+						cursor: offsetToCursor(offset),
+						node: widget
+					};
+				});
+			}
 		}
 	},
-	mutateAndGetPayload: ({widget}) => insertWidget(widget)
+	mutateAndGetPayload: ({widget}) => {
+		widget.owner.id = parseInt(fromGlobalId(widget.owner.id).id);
+		return insertWidget(widget);		
+	} 
 });

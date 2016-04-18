@@ -6,8 +6,7 @@ import { sizeType } from './size-type';
 const fields = {
 	owner: {
 		type: updateUserInputType,
-		description: 'The widget\'s user',
-		resolve: ({owner}) => owner
+		description: 'The widget\'s user'
 	},
 	name: {
 		type: GraphQLString,

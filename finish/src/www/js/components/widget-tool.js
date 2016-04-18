@@ -25,10 +25,7 @@ export default class WidgetTool extends BaseComponent {
 	constructor(props) {
 		super(props);
 
-		this.state = {
-		// 	widgets: [].concat(this.props.viewer.widgets)
-		};
-		
+		this.state = {};
 
 		this._saveWidget = this._saveWidget.bind(this);
 		this._editWidget = this._editWidget.bind(this);

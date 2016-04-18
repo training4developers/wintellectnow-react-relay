@@ -1,11 +1,11 @@
-import { GraphQLInputObjectType, GraphQLID, GraphQLString } from 'graphql';
+import { GraphQLInputObjectType, GraphQLString } from 'graphql';
 
 export const updateUserInputType = new GraphQLInputObjectType({
-	name: 'InputInsertUser',
+	name: 'InputUpdateUser',
 	description: 'Update a user',
 	fields: () => ({
 		id: {
-			type: GraphQLID,
+			type: GraphQLString,
 			description: 'User id'
 		},
 		name: {
