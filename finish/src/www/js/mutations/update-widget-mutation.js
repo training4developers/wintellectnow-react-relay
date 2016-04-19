@@ -7,12 +7,13 @@ export default class extends Relay.Mutation {
 	}
 	
 	getMutation() {
-		return Relay.QL`mutation { insertWidget }`;
+		return Relay.QL`mutation { updateWidget }`;
 	}
 	
 	getVariables() {
 		return {
 			widget: {
+				id: this.props.id,
 				name: this.props.name,
 				description: this.props.description,
 				color: this.props.color,
@@ -28,24 +29,18 @@ export default class extends Relay.Mutation {
 	
 	getConfigs() {
 		return [{
-			type: 'RANGE_ADD', // operation
-			// triggers update from container fragment viewer id
-			parentName: 'viewer', 
-			// this is the name of property from the output field
-			parentID: this.props.viewer.id, // id of viewer being updated
-			connectionName: 'widgets', // name of the connection
-			edgeName: 'widgetEdge', // output field name on GraphQL server
-			rangeBehaviors: {
-				'': 'append' // operation
+			type: 'FIELDS_CHANGE', // update operation
+			fieldIDs: {
+				// id of the top level fragment
+				viewer: this.props.viewer.id // id of the viewer updated
 			}
 		}];
 	}
 	
 	getFatQuery() {
-		
 		// corresponds to the structure of the output types
 		return Relay.QL`
-			fragment on InsertWidgetPayload @relay(pattern: true) {
+			fragment on UpdateWidgetPayload @relay(pattern: true) {
 				viewer {
 					users {
 						edges {

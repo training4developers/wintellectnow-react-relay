@@ -1,31 +1,18 @@
 import React from 'react';
 import Relay from 'react-relay';
+import BaseComponent from './base-component';
 import WidgetTableComponent from './widget-table';
 import InsertWidgetMutation from '../mutations/insert-widget-mutation';
-import { replaceItem, deleteItem } from '../immutable';
-
-export default class BaseComponent extends React.Component {
-
-	_fromEdges(collection, labelField = 'name') {
-		return collection.edges.map(edge => ({
-			value: edge.node.id, label: edge.node[labelField]
-		}));
-	}
-	
-	_fromEnumType(enumType) {
-		return enumType.enumValues.map(enumValue => ({
-			value: enumValue.name, label: enumValue.description
-		}));
-	}
-	
-}
+import UpdateWidgetMutation from '../mutations/update-widget-mutation';
+import DeleteWidgetMutation from '../mutations/delete-widget-mutation';
+import { deleteItem } from '../immutable';
 
 export default class WidgetTool extends BaseComponent {
 
 	constructor(props) {
 		super(props);
 
-		this.state = {};
+		this.state = {  editWidgetId: null };
 
 		this._saveWidget = this._saveWidget.bind(this);
 		this._editWidget = this._editWidget.bind(this);
@@ -40,10 +27,9 @@ export default class WidgetTool extends BaseComponent {
 	}
 
 	_updateWidget(widget) {
-		this.setState({
-			widgets: replaceItem(this.state.widgets, w => w.id === widget.id, widget),
-			editWidgetId: null
-		});
+		Relay.Store.commitUpdate(new UpdateWidgetMutation(
+			Object.assign({	viewer: this.props.viewer, widget: widget }, widget)
+		));		
 	}
 
 	_saveWidget(widget) {
@@ -52,6 +38,7 @@ export default class WidgetTool extends BaseComponent {
 		} else {
 			this._appendWidget(widget);
 		}
+		this.setState({ editWidgetId: null });
 	}
 
 	_editWidget(widgetId) {
@@ -62,8 +49,10 @@ export default class WidgetTool extends BaseComponent {
 		this.setState({ editWidgetId: null });
 	}
 
-	_deleteWidget(widgetId) {
-		this.setState({ widgets: deleteItem(this.state.widgets, w => w.id === widgetId) });
+	_deleteWidget(widget) {
+		Relay.Store.commitUpdate(new DeleteWidgetMutation(
+			Object.assign({	viewer: this.props.viewer, widget, widgetId: widget.id })
+		));			
 	}
 
 	render() {

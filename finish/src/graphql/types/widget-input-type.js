@@ -37,7 +37,7 @@ export const insertWidgetInputType = new GraphQLInputObjectType({
 });
 
 export const updateWidgetInputType = new GraphQLInputObjectType({
-	name: 'UpdateWidgetInput',
+	name: 'InputUpdateWidget',
 	description: 'A widget',
 	fields: () => Object.assign({}, fields, { id: { type: GraphQLID, description: 'Widget id to update' } })
 });

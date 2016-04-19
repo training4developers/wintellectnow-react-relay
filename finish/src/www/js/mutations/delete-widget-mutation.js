@@ -7,45 +7,32 @@ export default class extends Relay.Mutation {
 	}
 	
 	getMutation() {
-		return Relay.QL`mutation { insertWidget }`;
+		return Relay.QL`mutation { deleteWidget }`;
 	}
 	
 	getVariables() {
+		// receives the parameters from the constructor
 		return {
-			widget: {
-				name: this.props.name,
-				description: this.props.description,
-				color: this.props.color,
-				size: this.props.size,
-				quantity: this.props.quantity,
-				owner: {
-					id: this.props.owner.id,
-					name: this.props.owner.name
-				}
-			}
+			widgetId: this.props.widgetId
 		};
 	}	
 	
 	getConfigs() {
 		return [{
-			type: 'RANGE_ADD', // operation
+			type: 'NODE_DELETE', // operation
 			// triggers update from container fragment viewer id
 			parentName: 'viewer', 
 			// this is the name of property from the output field
 			parentID: this.props.viewer.id, // id of viewer being updated
 			connectionName: 'widgets', // name of the connection
-			edgeName: 'widgetEdge', // output field name on GraphQL server
-			rangeBehaviors: {
-				'': 'append' // operation
-			}
+			deletedIDFieldName: 'widgetId' // fat query payload field name of the id for the deleted node
 		}];
 	}
 	
 	getFatQuery() {
-		
 		// corresponds to the structure of the output types
 		return Relay.QL`
-			fragment on InsertWidgetPayload @relay(pattern: true) {
+			fragment on DeleteWidgetPayload @relay(pattern: true) {
 				viewer {
 					users {
 						edges {
@@ -72,7 +59,7 @@ export default class extends Relay.Mutation {
 						}
 					}
 				}
-				widgetEdge
+				widgetId
 			}
 		`;
 	}
