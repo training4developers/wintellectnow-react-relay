@@ -9,9 +9,10 @@ export default class extends Relay.Mutation {
 	getMutation() {
 		return Relay.QL`mutation { deleteWidget }`;
 	}
-	
+
+	// receives the parameters from the constructor, builds
+	// the variables to send the GraphQL server
 	getVariables() {
-		// receives the parameters from the constructor
 		return {
 			widgetId: this.props.widgetId
 		};
@@ -19,18 +20,23 @@ export default class extends Relay.Mutation {
 	
 	getConfigs() {
 		return [{
-			type: 'NODE_DELETE', // operation
+			// delete operation
+			type: 'NODE_DELETE',
 			// triggers update from container fragment viewer id
-			parentName: 'viewer', 
 			// this is the name of property from the output field
-			parentID: this.props.viewer.id, // id of viewer being updated
-			connectionName: 'widgets', // name of the connection
-			deletedIDFieldName: 'widgetId' // fat query payload field name of the id for the deleted node
+			parentName: 'viewer', 
+			// id of viewer being updated
+			parentID: this.props.viewer.id,
+			// name of the connection on the viewer
+			connectionName: 'widgets', 
+			// fat query payload field name of the id for the deleted node
+			deletedIDFieldName: 'widgetId'
 		}];
 	}
 	
 	getFatQuery() {
 		// corresponds to the structure of the output types
+		// patten is used to not specify the parameters for the connections
 		return Relay.QL`
 			fragment on DeleteWidgetPayload @relay(pattern: true) {
 				viewer {

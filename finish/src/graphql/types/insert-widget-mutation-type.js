@@ -32,7 +32,9 @@ export const insertWidgetMutationType = mutationWithClientMutationId({
 		}
 	},
 	mutateAndGetPayload: ({widget}) => {
+		// extract numeric owner id from global id
 		widget.owner.id = parseInt(fromGlobalId(widget.owner.id).id);
+		// save widget with extracted ids
 		return insertWidget(widget);		
 	} 
 });

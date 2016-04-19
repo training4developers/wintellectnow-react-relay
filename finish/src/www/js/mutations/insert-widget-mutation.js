@@ -10,9 +10,12 @@ export default class extends Relay.Mutation {
 		return Relay.QL`mutation { insertWidget }`;
 	}
 	
+	// receives the parameters from the constructor, builds
+	// the variables to send the GraphQL server
 	getVariables() {
 		return {
 			widget: {
+				// id is NOT included because we are insert and as such, there is id
 				name: this.props.name,
 				description: this.props.description,
 				color: this.props.color,
@@ -28,22 +31,27 @@ export default class extends Relay.Mutation {
 	
 	getConfigs() {
 		return [{
-			type: 'RANGE_ADD', // operation
+			// insert operation
+			type: 'RANGE_ADD', 
 			// triggers update from container fragment viewer id
-			parentName: 'viewer', 
 			// this is the name of property from the output field
-			parentID: this.props.viewer.id, // id of viewer being updated
-			connectionName: 'widgets', // name of the connection
-			edgeName: 'widgetEdge', // output field name on GraphQL server
+			parentName: 'viewer', 
+			// id of viewer being updated
+			parentID: this.props.viewer.id,
+			// name of the connection on viewer
+			connectionName: 'widgets',
+			// output field name on GraphQL server, should match the payload 
+			edgeName: 'widgetEdge',
+			// operation - not sure why this is needed
 			rangeBehaviors: {
-				'': 'append' // operation
+				'': 'append' 
 			}
 		}];
 	}
 	
 	getFatQuery() {
-		
 		// corresponds to the structure of the output types
+		// patten is used to not specify the parameters for the connections
 		return Relay.QL`
 			fragment on InsertWidgetPayload @relay(pattern: true) {
 				viewer {

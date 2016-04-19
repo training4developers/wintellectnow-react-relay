@@ -22,10 +22,7 @@ export const deleteWidgetMutationType = mutationWithClientMutationId({
 			resolve: widget => widget.id
 		}
 	},
-	mutateAndGetPayload: ({widgetId}) => {
-		console.dir(arguments[0], { depth: 0 });
-		// extract widget mongo _id from global id,
-		// and delete the widget with the extracted id
-		return deleteWidget(fromGlobalId(widgetId).id);		
-	} 
+	// extract widget mongo _id from global id,
+	// and delete the widget with the extracted id
+	mutateAndGetPayload: ({widgetId}) => deleteWidget(fromGlobalId(widgetId).id)		 
 });

@@ -10,10 +10,13 @@ export default class extends Relay.Mutation {
 		return Relay.QL`mutation { updateWidget }`;
 	}
 	
+	// receives the parameters from the constructor, builds
+	// the variables to send the GraphQL server
 	getVariables() {
 		return {
 			widget: {
-				id: this.props.id,
+				// id is included because we are updating, input type must accept id
+				id: this.props.id, 
 				name: this.props.name,
 				description: this.props.description,
 				color: this.props.color,
@@ -29,16 +32,19 @@ export default class extends Relay.Mutation {
 	
 	getConfigs() {
 		return [{
-			type: 'FIELDS_CHANGE', // update operation
+			// update operation
+			type: 'FIELDS_CHANGE',
 			fieldIDs: {
 				// id of the top level fragment
-				viewer: this.props.viewer.id // id of the viewer updated
+				// id of the viewer updated
+				viewer: this.props.viewer.id 
 			}
 		}];
 	}
 	
 	getFatQuery() {
 		// corresponds to the structure of the output types
+		// patten is used to not specify the parameters for the connections
 		return Relay.QL`
 			fragment on UpdateWidgetPayload @relay(pattern: true) {
 				viewer {

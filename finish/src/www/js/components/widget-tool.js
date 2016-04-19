@@ -5,7 +5,6 @@ import WidgetTableComponent from './widget-table';
 import InsertWidgetMutation from '../mutations/insert-widget-mutation';
 import UpdateWidgetMutation from '../mutations/update-widget-mutation';
 import DeleteWidgetMutation from '../mutations/delete-widget-mutation';
-import { deleteItem } from '../immutable';
 
 export default class WidgetTool extends BaseComponent {
 
