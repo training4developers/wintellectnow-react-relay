@@ -2,6 +2,12 @@ import React from 'react';
 import DropDownComponent from './drop-down';
 
 export default class EditRow extends React.Component {
+	
+	static defaultState = {
+		id: -1, name: '', description: '', color: '',
+		size: '',
+		quantity: 0, ownerId: -1
+	};
 
 	constructor(props) {
 		super(props);
@@ -17,19 +23,12 @@ export default class EditRow extends React.Component {
 				ownerId: props.widget.owner.id
 			};
 		} else {
-			this.state = {
-				id: -1,
-				name: '',
-				description: '',
-				color: '',
-				size: '',
-				quantity: 0,
-				ownerId: -1
-			};
+			this.state = EditRow.defaultState;
 		}
 
 		this._onChange = this._onChange.bind(this);
 		this._onSave = this._onSave.bind(this);
+		this._onCancelEdit = this._onCancelEdit.bind(this);
 	}
 
 	_onChange(e) {
@@ -43,6 +42,14 @@ export default class EditRow extends React.Component {
 			id: user.value,
 			name: user.label
 		} }));
+		this.setState(EditRow.defaultState);
+	}
+	
+	_onCancelEdit() {
+		if (this.props.onCancelEdit) {
+			this.props.onCancelEdit();
+		}
+		this.setState(EditRow.defaultState);
 	}
 
 	render() {
@@ -56,11 +63,10 @@ export default class EditRow extends React.Component {
 			<td><DropDownComponent name='ownerId' items={this.props.userList} value={this.state.ownerId} onChange={this._onChange} /></td>
 			<td>
 				<button className='btn btn-primary btn-sm' type='button' onClick={() => this._onSave(this.state)}>Save</button>
-				<button className='btn btn-default btn-sm' type='button' onClick={this.props.onCancelEdit}>Cancel</button>
+				<button className='btn btn-secondary btn-sm' type='button' onClick={this._onCancelEdit}>Cancel</button>
 			</td>
 		</tr>;
 
 	}
-
 
 }

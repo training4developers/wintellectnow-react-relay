@@ -49,9 +49,9 @@ export default class WidgetTool extends BaseComponent {
 	}
 
 	_deleteWidget(widget) {
-		Relay.Store.commitUpdate(new DeleteWidgetMutation(
-			Object.assign({	viewer: this.props.viewer, widget, widgetId: widget.id })
-		));			
+		Relay.Store.commitUpdate(new DeleteWidgetMutation({
+			viewer: this.props.viewer, widget, widgetId: widget.id
+		}));			
 	}
 
 	render() {
